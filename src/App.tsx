@@ -75,11 +75,11 @@ function App() {
     }
 
     function addTask(title: string, todoListId: string) {
-        let task = {id: v1(), title: title, isDone: true}
+        let task = {id: v1(), title: title, isDone: false}
         //Достаем нужный массив с помощью todoListId
         let todoListTasks = tasks[todoListId]
         //перезапишем в этом объекте массив для нужного тудулиста копией добавив в начало новую
-        tasks[todoListId] = [task, ...todoListTasks]
+        tasks[todoListId] = [...todoListTasks, task]
         //сетаем в стейтт копию объекта, чтобы React отреагровал перересовкой
         setTasks({...tasks})
     }

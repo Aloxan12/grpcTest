@@ -58,13 +58,13 @@ export function ToDoList(props: ToDoListType) {
                         const onChangeTitle = (newTitle: string)=>{
                             props.changeTitle(t.id, newTitle, props.todoListId)
                         }
-                        return <li className={t.isDone?'is-done': ''}>
+                        return <div className={t.isDone?'is-done': ''}>
                             <Checkbox onChange={onChangeStatus} checked={t.isDone} />
                         <EditableSpan value={t.title} changeTitle={onChangeTitle}/>
                             <IconButton onClick={onRemoveHandler}>
                                 <Delete />
                             </IconButton>
-                    </li>}
+                    </div>}
                     )
                 }
             </ul>

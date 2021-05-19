@@ -1,48 +1,52 @@
 import React, {ChangeEvent,KeyboardEvent, useState} from 'react';
 import './ToDoList.css'
-import {FilterValueType} from "../App";
 import {Button, IconButton, TextField} from '@material-ui/core';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import {AddBox} from "@material-ui/icons";
 
 export type AddItemFormPropsType = {
     addItem:(title: string)=>void
 }
 
 export function AddItemForm (props: AddItemFormPropsType) {
-    const [newTaskTitle, setNewTaskTitle] = useState('')
+    const [title, setTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
-    const onNewTaskTitleChange = (e:ChangeEvent<HTMLInputElement>) =>{
-        setNewTaskTitle(e.currentTarget.value)
-    }
-    const onNewItemKeyPress = (e: KeyboardEvent<HTMLInputElement>)=>{
-        setError(null);
-        if(e.charCode === 13){
-            props.addItem(newTaskTitle);
-            setNewTaskTitle('');
+
+
+    const addItem = () => {
+        if (title.trim() !== "") {
+            props.addItem(title);
+            setTitle("");
+        } else {
+            setError("Title is required");
         }
     }
-    const addItem = ()=>{
-        if(newTaskTitle.trim() !== ''){
-            props.addItem(newTaskTitle)
-            setNewTaskTitle('')
-        }else {
-            setError('Title is required')
+
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.currentTarget.value)
+    }
+
+    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (error !== null) {
+            setError(null);
+        }
+        if (e.charCode === 13) {
+            addItem();
         }
     }
+
     return (
         <div>
-            <div>
-                <TextField
-                    value={newTaskTitle}
-                    variant={'outlined'}
-                    label={'Type value'}
-                    onChange={onNewTaskTitleChange}
-                    onKeyPress={onNewItemKeyPress}
-                    error={!!error}
-                    helperText={error}
-                />
-                <IconButton onClick={addItem} color={"primary"} ><AddCircleOutlineIcon/></IconButton>
-            </div>
+            <TextField variant="outlined"
+                       error={!!error}
+                       value={title}
+                       onChange={onChangeHandler}
+                       onKeyPress={onKeyPressHandler}
+                       label="Title"
+                       helperText={error}
+            />
+            <IconButton color="primary" onClick={addItem}>
+                <AddBox />
+            </IconButton>
         </div>
     );
 }
