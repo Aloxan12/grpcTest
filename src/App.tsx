@@ -10,7 +10,7 @@ export type FilterValueType = "all" | "active" | "completed"
 export type TaskStateType = {
     [key: string]: Array<TaskType>
 }
-type TodoListType = {
+export type TodoListType = {
     id: string
     title: string
     filter: FilterValueType
