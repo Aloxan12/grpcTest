@@ -1,9 +1,0 @@
-.ToDoList{
-  padding: 30px;
-  display: flex;
-  border: 1px solid black;
-}
-
-.ToDoList > div{
-  margin-right: 50px;
-}
