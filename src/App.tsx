@@ -1,34 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState} from 'react'
 import './App.css'
+import {GreeterClient} from "../hello.client.ts";
+import {HelloRequest} from "../hello.ts";
+import { GrpcWebFetchTransport } from '@protobuf-ts/grpcweb-transport';
+
+const transport = new GrpcWebFetchTransport({
+    baseUrl: 'http://127.0.0.1:50051', // адрес вашего сервера
+});
+// Создаем экземпляр клиента, передаем transport
+const grpcClient = new GreeterClient(transport);
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [response, setResponse] = useState<string>('');
+    const [greeting, setGreeting] = useState<string>('');
+
+    const sendMessage = () => {
+        // Используйте create() для создания запроса
+        const request = HelloRequest.create({ name: greeting });
+
+        grpcClient.sayHello(request).then((res) => {
+            console.log('res', res)
+            // setResponse(res.getMessage());
+        }).catch((err) => {
+            console.error('Error:', err);
+            setResponse('Error occurred');
+        });
+    };
 
   return (
-    <>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+          <h1>gRPC Web Example</h1>
+          <input
+              type="text"
+              value={greeting}
+              onChange={(e) => setGreeting(e.target.value)}
+              placeholder="Enter greeting"
+          />
+          <button onClick={sendMessage}>Send Message</button>
+          <div>{response && <p>Response: {response}</p>}</div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
   )
 }
 
