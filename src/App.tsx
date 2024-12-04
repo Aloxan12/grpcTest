@@ -1,43 +1,38 @@
-import { useState} from 'react'
 import './App.css'
-import {GreeterClient} from "../hello.client.ts";
-import {HelloRequest} from "../hello.ts";
-import { GrpcWebFetchTransport } from '@protobuf-ts/grpcweb-transport';
+import {useAuthMutation} from "./store/services/grpcApi.ts";
+import {AuthGrpcClient} from "../proto-gen/auth.client.ts";
+import {GrpcWebFetchTransport} from "@protobuf-ts/grpcweb-transport";
+import {AuthRequest} from "../proto-gen/auth_requests.ts";
+import {UserType} from "../proto-gen/data_types.ts";
+// import {GreeterClient} from "./store/proto/store/proto/hello_grpc_web_pb";
+// import {HelloRequest} from "./store/proto/store/proto/hello_pb";
 
 const transport = new GrpcWebFetchTransport({
-    baseUrl: 'http://127.0.0.1:50051', // адрес вашего сервера
+    baseUrl: 'https://pre-dev.kassir.grpc.fox-dev.ru:8001/', // Укажите адрес вашего gRPC сервера
 });
-// Создаем экземпляр клиента, передаем transport
-const grpcClient = new GreeterClient(transport);
+
+const grpcClient = new AuthGrpcClient(transport);
 
 function App() {
-    const [response, setResponse] = useState<string>('');
-    const [greeting, setGreeting] = useState<string>('');
+    const [authFn] = useAuthMutation()
 
-    const sendMessage = () => {
-        // Используйте create() для создания запроса
-        const request = HelloRequest.create({ name: greeting });
-
-        grpcClient.sayHello(request).then((res) => {
+    const auth = ()=>{
+        const authBody = AuthRequest.create({username: 'string',password: 'string',userType: UserType.agent})
+        grpcClient.auth(authBody).then(res=>{
             console.log('res', res)
-            // setResponse(res.getMessage());
-        }).catch((err) => {
-            console.error('Error:', err);
-            setResponse('Error occurred');
-        });
-    };
+        }).catch(err => console.log('err', err))
+        console.log('here')
+    }
+    const auth2 = ()=> {
+        console.log('auth2')
+        authFn({username: 'string',password: 'string'}).unwrap().then(data => console.log('data',data))
+    }
 
   return (
       <div>
           <h1>gRPC Web Example</h1>
-          <input
-              type="text"
-              value={greeting}
-              onChange={(e) => setGreeting(e.target.value)}
-              placeholder="Enter greeting"
-          />
-          <button onClick={sendMessage}>Send Message</button>
-          <div>{response && <p>Response: {response}</p>}</div>
+          <button onClick={auth2}>auth 2</button>
+          <button onClick={auth}>auth</button>
       </div>
   )
 }

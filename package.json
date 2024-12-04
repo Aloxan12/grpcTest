@@ -8,22 +8,29 @@
     "build": "tsc -b && vite build",
     "lint": "eslint vite-project",
     "preview": "vite preview",
-    "generate:proto": "npx protoc --ts_out ./proto-gen --proto_path ./src/store/proto ./src/store/proto/hello.proto"
+    "generate:proto-ts": "npx protoc --ts_out ./proto-gen --proto_path ./src/store/proto/bill ./src/store/proto/bill/*.proto",
+    "generate:proto": "protoc -I=src/store/proto/bill --js_out=import_style=esmodule,binary:src/store/proto/bill/gen --grpc-web_out=import_style=commonjs+dts,mode=grpcwebtext:./src/store/proto/bill/gen ./src/store/proto/bill/*.proto",
+    "generate:proto=22": "npx protoc --proto_path=./src/store/proto/bill  --js_out=import_style=commonjs,binary:./generated --grpc-web_out=import_style=typescript,mode=grpcwebtext:./generated ./src/store/proto/bill/*.proto",
+    "generate:proto=44": "protoc --proto_path=./src/store/proto/bill/  ./src/store/proto/bill/*.proto --js_out=import_style=esmodule,binary:./generated --grpc-web_out=import_style=typescript,mode=grpcwebtext:./generated"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.12.3",
     "@grpc/proto-loader": "^0.7.13",
     "@improbable-eng/grpc-web": "^0.15.0",
+    "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@protobuf-ts/grpcweb-transport": "^2.9.4",
     "@protobuf-ts/plugin": "^2.9.4",
     "@protobuf-ts/runtime": "^2.9.4",
     "@reduxjs/toolkit": "^2.4.0",
+    "@rollup/plugin-commonjs": "^28.0.1",
     "google-protobuf": "^3.21.4",
     "grpc-web": "^1.5.0",
     "protobufjs": "^7.4.0",
+    "protoc-gen-grpc-web": "^1.5.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-redux": "^9.1.2"
+    "react-redux": "^9.1.2",
+    "rtk-query-grpc-web": "^0.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",

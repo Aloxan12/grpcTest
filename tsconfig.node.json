@@ -21,10 +21,6 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    "baseUrl": ".",
-    "paths": {
-      "@proto/*": ["src/store/proto/*"]
-    }
   },
   "include": [
     "vite.config.ts"
