@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package middle_permission_microservice.api.v1;
+
+message AuthData {
+  string userId = 1;
+}
+
+message MetaData {
+  AuthData authData = 1;
+}
+
+message Pagginator {
+  int32 total = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+}

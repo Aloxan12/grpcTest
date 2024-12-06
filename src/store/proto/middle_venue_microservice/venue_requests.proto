@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.kassir";
+option java_outer_classname = "BilAuthAuthRequestsGrpcProto";
+
+package venue;
+
+import "venue_data_types.proto";
+
+// Enums
+enum PrepareDataStatus {
+    none = 0;
+    expired = 1;
+    inProgress = 2;
+    exists = 3;
+}
+
+message RoleRequest {
+    string username = 1;
+    string token = 2;
+    UserType userType = 3;
+}
+
+message SessionInfo {
+    string username = 1;
+    UserType userType = 2;
+    string venueSchemeUrl = 3;
+    string bookletUrl = 4;
+}
+
+//  Messages for prepare inital data
+
+message PrepareInitialDataResult {
+    enum ResultType {
+        started = 0;
+        processing = 1;
+        completed = 2;
+    }
+
+    string messageResult = 1;
+    ResultType resultType = 2;
+    uint32 completedPercent = 3;
+}

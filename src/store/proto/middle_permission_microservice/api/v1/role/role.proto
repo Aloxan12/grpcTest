@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package middle_permission_microservice.api.v1;
+
+import "api/v1/role/requests.proto";
+import "api/v1/role/responses.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "MiddleRoleGrpcProto";
+option java_package = "com.middle.role";
+
+service MiddleRoleGrpc {
+  rpc GetListRoles(RequestListRoles) returns (ResponseListRoles) {}
+}

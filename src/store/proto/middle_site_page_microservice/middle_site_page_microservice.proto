@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package middle_site_page_microservice;
+
+import "middle_site_page_microservice_data_types.proto";
+import "middle_site_page_microservice_requests.proto";
+
+
+// Services
+service SitePageGrpc {
+  rpc CreateSitePage(CreateSitePageRequest) returns (CreateSitePageResponse);
+
+  rpc GetSitePage(GetSitePageRequest) returns (GetSitePageResponse);
+
+  rpc UpdateSitePage(UpdateSitePageRequest) returns (UpdateSitePageResponse);
+
+  rpc DeleteSitePage(DeleteSitePageRequest) returns (DeleteSitePageResponse);
+}

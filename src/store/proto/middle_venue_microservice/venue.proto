@@ -1,0 +1,153 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.kassir";
+option java_outer_classname = "BilAuthGrpcProto";
+
+package venue;
+
+import "venue_data_types.proto";
+import "venue_data_types_requests.proto";
+import "venue_requests.proto";
+
+
+// Services
+service VenueGrpc {
+
+  // Подготовка данных
+  rpc PrepareInitialData (RoleRequest) returns (stream PrepareInitialDataResult) {}
+
+  // INITIAL DATA
+
+  // Session
+  // Информация о сеансе
+  rpc GetSessionInfo(RoleRequest) returns (SessionInfo) {}
+
+  // Kind
+  // Список всех разделов для представлений
+  rpc GetInitialKindData (RoleRequest) returns (KindList) {}
+
+  // VenueType
+  // Список всех типов мест проведений
+  rpc GetInitialVenueTypeDataList (RoleRequest) returns (VenueTypeList) {}
+
+  // TODO Misc 
+  // Частичный URL схемы зала конкретного сеанса. Для получения полного URL необходимо в конце добавить id сеанса.
+  // Частичный URL буклета конкретного представления. Для получения полного URL необходимо в конце добавить id представления.
+  // Количество представлений, находящихся в настоящее время в продаже
+  // Количество сеансов, находящихся в настоящее время в продаже
+
+  // BarcodeFormat
+  // Список всех форматов штрихкодов
+  rpc GetInitialBarcodeFormatDataList (RoleRequest) returns (BarcodeFormatList) {}
+
+  // QuotaFormat
+  // Список всех форматов файлов квоты
+  rpc GetInitialQuotaFormatDataList (RoleRequest) returns (QuotaFormatList) {}
+
+  // BookletType
+  // Список всех форматов буклетов
+  rpc GetInitialBookletTypeDataList (RoleRequest) returns (BookletTypeList) {}
+
+  // Genre
+  // Список всех жанров
+  rpc GetInitialGenreDataList (RoleRequest) returns (GenreList) {}
+
+  // ZoneId
+  // Список всех часовых поясов
+  rpc GetZoneIdDataList (RoleRequest) returns (ZoneIdList) {}
+
+  // Currency
+  // Список всех валют
+  rpc GetInitialCurrencyDataList (RoleRequest) returns (CurrencyList) {}
+
+  // Массив начальных данных
+
+  // EOrganizer
+  // Список всех компаний-организаторов, заполняется только для пользователя с ролью оператор
+  rpc GetInitialEOrganizerDataList (RoleRequest) returns (EOrganizerList) {}
+
+  // Country
+  // Список всех стран
+  rpc GetInitialCountryData (RoleRequest) returns (stream Country) {}
+  rpc DeleteCountry(DeleteCountryRequest) returns (Country) {}
+
+  // City
+  // Список всех городов
+  rpc GetInitialCityData (RoleRequest) returns (stream City) {}
+  rpc GetInitialCityByCountryData (GetCityByCountryRequest) returns (stream City) {}
+  rpc GetInitialCityListByCountryData (GetCityByCountryRequest) returns (CityList) {}
+  rpc DeleteCity(DeleteCityRequest) returns (City) {}
+
+  // Venue
+  // Список всех мест проведений
+  rpc GetInitialVenueByCityData (GetVenueByCityRequest) returns (SimpleVenueList) {}
+  rpc GetInitialVenueDataFiltered (GetVenueFilteredRequest) returns (SimpleVenueList) {}
+  rpc GetInitialVenueByIdData (GetVenueByIdRequest) returns (Venue) {}
+  rpc AddVenue(AddVenueRequest) returns (AddVenueResponse) {}
+  rpc SaveVenue(SaveVenueRequest) returns (SaveVenueResponse) {}
+  rpc DeleteVenue(DeleteVenueRequest) returns (Venue) {}
+
+  // SeatingPlan
+  // Список доступных схем залов
+  rpc GetInitialSeatingPlanDataList (GetSeatingPlanListRequest) returns (SimpleSeatingPlanList) {}
+  rpc GetInitialSeatingPlanByIdData (GetSeatingPlanByIdRequest) returns (SeatingPlan) {}
+  rpc GetSeatingPlanByIdFullData(GetSeatingPlanByIdRequest) returns (GetSeatingPlanFullData) {}
+  rpc DeleteSeatingPlan(DeleteSeatingPlanRequest) returns (SeatingPlan) {}
+
+  // Gateway
+  // Список доступных подключений к ВБС
+  rpc GetInitialSGatewayDataList (RoleRequest) returns (GatewayList) {}
+
+  // Action
+  // Список актуальных представлений
+  rpc GetInitialActionDataList (GetActionFilteredRequest) returns (SimpleActionList) {}
+  rpc GetInitialActionIdData (GetActionByIdRequest) returns (Action) {}
+  rpc DeleteAction (DeleteActionRequest) returns (Action) {}
+
+  // ActionEvent
+  // Список всех неархивных сеансов
+  rpc GetInitialActionEventDataList (GetActionEventFilteredRequest) returns (ActionEventList) {}
+  // Добавление новых сеансов. Можно добавить несколько сеансов, однако есть ограничение, общее количество мест всех добавляемых сеансов не должно превышать 50 тысяч.
+  rpc AddActionEvent (AddActionEventRequest) returns (ActionEventList) {}
+  rpc deleteActionEvent(DeleteActionEventRequest) returns (ActionEvent) {}
+
+  // Добавление нового представления для организатора.
+  rpc AddAction (AddActionRequest) returns (Action) {}
+
+  // Сохранение представления.
+  rpc SaveAction (SaveActionRequest) returns (Action) {}
+
+  // Получение доступных сеансов в подключении к ВБС. Полученные данные необходимы для создания нового сеанса, использующего данное подключение к ВБС.
+  rpc GetGatewayEventList (GetGatewayEventListRequest) returns (GatewayEventList) {}
+
+  // Сохранение сеанса.
+  rpc SaveActionEvent (SaveActionEventRequest) returns (ActionEvent) {}
+
+  // Добавление новой страны
+  rpc AddCountry (AddCountryRequest) returns (Country) {}
+
+  // Сохранение страны
+  rpc SaveCountry (SaveCountryRequest) returns (Country) {}
+
+  // Добавление нового города
+  rpc AddCity (AddCityRequest) returns (City) {}
+
+  // Сохранение города
+  rpc SaveCity (SaveCityRequest) returns (City) {}
+
+  // Добавление простого плана рассадки
+  rpc AddPlan1 (AddPlan1Request) returns (SeatingPlan) {}
+
+  // Добавление плана рассадки со схемой
+  rpc CheckPlan (CheckPlanRequest) returns (CheckPlanResponse) {}
+  rpc AddPlan2 (AddPlan2Request) returns (SeatingPlan) {}
+
+  // Сохранени плана рассадки
+  rpc SavePlan (SavePlanRequest) returns (SeatingPlan) {}
+
+  // Работа с ВБС
+  rpc SyncEts (ActionEventSyncRequest) returns (ActionEventSyncResponse) {}
+  rpc GetSyncReport (GetSyncReportRequest) returns (GetSyncReportResponse) {}
+  rpc GetGatewayEventInfo (GetGatewayEventInfoRequest) returns (GetGatewayEventInfoResponse) {}
+}

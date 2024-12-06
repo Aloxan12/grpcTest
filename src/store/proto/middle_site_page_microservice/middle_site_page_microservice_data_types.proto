@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package middle_site_page_microservice;
+
+import "middle_site_page_microservice_struct.proto";
+
+
+// Genre
+message SitePage {
+    // Идентификатор
+    uint64 id = 1;
+    // Meta заголовок
+    string metatitle = 2;
+    // Meta ключевые слова
+    string metakeys = 3;
+    // Meta описание
+    string metadesc = 4;
+    // Заголовок H1
+    string h1 = 5;
+    // Содержимое после H1
+    string afterH1 = 6;
+    // Пользовательский текст
+    string customText = 7;
+    // Флаг noindex
+    bool noindex = 8;
+    // URL переадресации
+    string redirect = 9;
+    // Канонический URL
+    string canonical = 10;
+    // Идентификатор шаблона SEO
+    uint64 sitePageTemplateId = 11;
+}

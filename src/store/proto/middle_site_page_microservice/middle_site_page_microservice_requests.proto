@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package middle_site_page_microservice;
+
+import "middle_site_page_microservice_data_types.proto";
+
+message Empty {}
+
+message CreateSitePageRequest {
+    SitePage sitePage = 1;
+}
+
+message CreateSitePageResponse {
+    uint64 id = 1;
+}
+
+message GetSitePageRequest {
+    uint64 id = 1;
+}
+
+message GetSitePageResponse {
+    SitePage sitePage = 1;
+}
+
+message UpdateSitePageRequest {
+    uint64 id = 1;
+}
+
+message UpdateSitePageResponse {
+    SitePage sitePage = 1;
+}
+
+message DeleteSitePageRequest {
+    uint64 id = 1;
+}
+
+message DeleteSitePageResponse {
+     uint64 id = 1;
+}

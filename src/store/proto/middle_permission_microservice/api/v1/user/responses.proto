@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package middle_permission_microservice.api.v1;
+
+import "api/v1/user/types.proto";
+
+message ResponseCreateUser {
+  bool success = 1;
+  oneof result {
+    string error_message = 2;
+    CreatedUserData response = 3; 
+  }
+}

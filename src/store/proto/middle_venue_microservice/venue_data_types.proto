@@ -1,0 +1,564 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.kassir";
+option java_outer_classname = "BilAuthDataTypesGrpcProto";
+
+package venue;
+
+import "venue_struct.proto";
+
+enum UserType {
+  operator = 0;
+  agent = 1;
+  organizer = 2;
+}
+
+// LoginUser (данные пользователя)
+message LoginUser {
+  // id пользователя
+  uint64 id = 1;
+  // id компании
+  uint64 authorityId = 2;
+  // email пользователя
+  string email = 3;
+  // имя пользователя
+  string name = 4;
+  // фамилия пользователя
+  string surname = 5;
+  // название компании
+  string authorityName = 6;
+  // роль пользователя, возможные значения OPERATOR, AGENT, ORGANIZER
+  UserType userType = 7;
+}
+
+// Kind
+message KindList { repeated Kind kindList = 1; }
+
+message Kind {
+  // id раздела
+  uint64 id = 1;
+  // название раздела
+  string name = 2;
+}
+
+// VenueType
+message VenueTypeList { repeated VenueType venueType = 1; }
+
+message VenueType {
+  // id типа
+  uint64 id = 1;
+  // название типа
+  string name = 2;
+}
+
+// Gateway (подключение к ВБС)
+message GatewayList { repeated Gateway gatewayList = 1; }
+
+message Gateway {
+  // id подключения
+  uint64 id = 1;
+  // id шлюза в ВБС
+  uint32 systemId = 2;
+  // название подключения
+  string name = 3;
+  // название шлюза ВБС
+  string systemName = 4;
+  // id компании-организатора, владельца подключения
+  optional uint64 organizerId = 5;
+  // название компании-организатора, владельца подключения
+  optional string organizerName = 6;
+}
+
+// BarcodeFormat
+message BarcodeFormatList { repeated BarcodeFormat barcodeFormat = 1; }
+
+message BarcodeFormat {
+  // id формата штрихкода
+  uint64 id = 1;
+  // название формата штрихкода
+  string name = 2;
+}
+
+// QuotaFormat
+message QuotaFormatList { repeated QuotaFormat quotaFormat = 1; }
+
+message QuotaFormat {
+  // id формата файла квоты
+  uint64 id = 1;
+  // название формата файла квоты
+  string desc = 2;
+  // описание фильтра выбора файлов
+  string fileFilterDesc = 3;
+  // расширения файлов фильтра выбора файлов
+  repeated string fileFilterExtensions = 4;
+}
+
+// BookletType
+message BookletTypeList { repeated BookletType bookletTypeList = 1; }
+
+message BookletType {
+  // id формата файла буклета
+  uint64 id = 1;
+  // название формата файла буклета
+  string desc = 2;
+  // описание фильтра выбора файлов
+  string fileFilterDesc = 3;
+  // расширение файла фильтра выбора файлов
+  string extension = 4;
+}
+
+// Genre
+message GenreList { repeated Genre genre = 1; }
+
+message Genre {
+  // id жанра
+  uint64 id = 1;
+  // название жанра
+  string name = 2;
+}
+
+// ZoneId
+message ZoneIdList { repeated ZoneId zoneId = 1; }
+
+message ZoneId {
+  // идентификатор часового пояса
+  string id = 1;
+  // строковое представление смещения относительно UTC
+  string standardOffsetString = 2;
+  // смещение относительно UTC в секундах
+  uint64 standardOffsetSeconds = 3;
+}
+
+// Currency
+message CurrencyList { repeated Currency currency = 1; }
+
+message Currency {
+  // трехбуквенный код валюты
+  string currencyCode = 1;
+  // числовой код валюты
+  uint32 numericCode = 2;
+  // название валюты
+  string displayName = 3;
+}
+
+// EOrganizer
+message EOrganizerList { repeated EOrganizer organizer = 1; }
+
+message EOrganizer {
+  // id компании-организатора
+  uint64 id = 1;
+  // название компании-организатора
+  string name = 2;
+}
+
+// Country
+message CountryList { repeated Country country = 1; }
+
+message Country {
+  // id страны
+  uint64 id = 1;
+  // название страны
+  string name = 2;
+}
+
+// City
+message CityList { repeated City city = 1; }
+
+message City {
+  // id города
+  uint64 id = 1;
+  // id страны
+  uint64 countryId = 2;
+  // название города
+  string name = 3;
+  // идентификатор часового пояса
+  string zoneId = 4;
+}
+
+// Venue
+message SimpleVenueList { repeated SimpleVenue simpleVenueList = 1; }
+
+message VenueList { repeated VenueList venueList = 1; }
+
+message SimpleVenue {
+  // id места проведения
+  uint64 id = 1;
+  // id города
+  uint64 cityId = 2;
+  // название города
+  string cityName = 3;
+  // трехбуквенный код валюты по умолчанию для данного места проведения
+  string currency = 4;
+  // название места проведения
+  string name = 5;
+  // тип места проведения
+  VenueType venueType = 6;
+  // адрес места проведения
+  string address = 7;
+  // широта координат места проведения
+  string geoLat = 8;
+  // долгота координат места проведения
+  string geoLon = 9;
+  // описание места проведения
+  string description = 10;
+  string nameHex = 11;
+}
+
+// Venue
+message Venue {
+  // базовые значения места проведения
+  SimpleVenue simpleVenue = 1;
+
+  // изображение места проведения
+  optional Image bigImage = 11;
+}
+
+// Image
+message Image {
+  // содержимое файла, кодированное в Base64, может быть пустым,
+  // если содержимое надо запрашивать отдельно
+  string img = 1;
+  // тип, расширение файла изображения
+  string type = 2;
+  // контрольная сумма содержимого файла, используется
+  // для контроля изменения изображения при кэшировании на стороне клиента
+  string hash = 3;
+}
+
+// SeatingPlan
+message SimpleSeatingPlanList {
+  repeated SimpleSeatingPlan seatingPlanList = 1;
+}
+
+message SeatingPlanList { repeated SeatingPlan seatingPlanList = 1; }
+
+message SimpleSeatingPlan {
+  // id схемы зала
+  uint64 id = 1;
+  // id места проведения
+  uint64 venueId = 2;
+  // название места проведения
+  string venueName = 3;
+  // трехбуквенный код валюты по умолчанию для данной схемы зала
+  string currency = 4;
+  // true – схема содержит места с размещением
+  bool placement = 5;
+  // название схемы зала
+  string name = 6;
+  // список категорий схемы зала
+  repeated Category categoryList = 7;
+  // список ограничений категорий
+  repeated CategoryLimit categoryLimitList = 8;
+  // true – схема содержит spl файл
+  bool splExists = 10;
+  // true – у пользователя есть права на удаление этой схемы
+  bool owner = 11;
+}
+
+message SeatingPlan {
+  // базовые значения схемы зала
+  SimpleSeatingPlan simpleSeatingPlan = 1;
+
+  // содержимое svg файла, сжатое gzip кодированное в Base64,
+  // может отсутствовать, если содержимое надо запрашивать отдельно
+  string svgZip = 2;
+
+  // содержит PNG файл кодированный в Base64
+  string png = 3;
+}
+
+// Точка координат
+message Point {
+  double x = 1;
+  double y = 2;
+}
+
+// Данные места
+message SeatData {
+  // Координаты места на схеме
+  Point coodrinates = 1;
+  // id места
+  uint64 seatId = 2;
+  // название места
+  string sector = 3;
+  // название ряда
+  string row = 4;
+  // название места
+  string number = 5;
+  // id категории
+  uint64 categoryId = 6;
+}
+
+// Данные о местах схемы
+message GetSeatingPlanFullData {
+  // базовые значения схемы зала
+  SeatingPlan seatingPlan = 1;
+  // данные мест
+  repeated SeatData seatDataList = 2;
+}
+
+// Category
+message Category {
+  // id категории
+  uint64 id = 1;
+  // true – места в категории с размещением
+  bool placement = 2;
+  // название категории
+  string name = 3;
+  // количество мест в категории
+  uint64 seatsNumber = 4;
+  // начальная цена мест в категории
+  optional double initPrice = 5;
+}
+
+message CategoryLimit {
+  // id ограничения категорий
+  uint64 id = 1;
+  // список категорий, входящих в ограничение
+  repeated Category categoryList = 2;
+  // общее максимальное количество мест,
+  // которое можно продать в категориях, входящих в ограничение
+  uint64 limit = 3;
+}
+
+
+// Action
+message SimpleActionList { repeated SimpleAction simpleActionList = 1; }
+
+message ActionList { repeated Action actionList = 1; }
+
+enum Age {
+  // C_0 – 0+
+  C_0 = 0;
+  // C_6 – 6+
+  C_6 = 1;
+  // C_12 – 12+
+  C_12 = 2;
+  // C_16 – 16+
+  C_16 = 3;
+  // C_18 – 18+
+  C_18 = 4;
+}
+
+message SimpleAction {
+  // TODO check description
+  // id страны ???
+  uint64 id = 1;
+  // id компании-организатора, создателя представления
+  uint64 organizerId = 2;
+  // название компании-организатора, создателя представления
+  string organizerName = 3;
+  // раздел для представления
+  Kind kind = 4;
+  // краткое название представления
+  string name = 5;
+  // полное название представления
+  string fullName = 6;
+  // продолжительность представления в миллисекундах
+  uint64 duration = 7;
+  // заголовок описания представления
+  string posterName = 8;
+  // описание представления
+  string posterDesc = 9;
+  // формат постера, если есть
+  optional BookletType bookletType = 12;
+  // рейтинг представления, число от 0 до 10 включительно
+  uint64 rating = 13;
+  // возрастное ограничение, может принимать значения:
+  // UNKNOWN – не задано
+  // C_0 – 0+
+  // C_6 – 6+
+  // C_12 – 12+
+  // C_16 – 16+
+  // C_18 – 18+
+  Age age = 14;
+  // список всех жанров представления
+  repeated Genre genreSet = 15;
+  // название устроителя
+  string legalOwner = 16;
+  // ИНН устроителя
+  string legalOwnerInn = 17;
+  // телефон устроителя
+  string legalOwnerPhone = 18;
+  // минимальный сервисный сбор для представления
+  double minChargePercent = 19;
+  // КДП - код доступа к представлению
+  optional uint64 kdp = 20;
+  // список id городов, в которых идет представление
+  repeated uint64 cityIdSet = 21;
+  // список id мест проведения, в которых идет представление
+  repeated uint64 venueIdSet = 22;
+  // true – представление актуальное
+  bool actual = 23;
+}
+
+message Action {
+  // Базовые значения представления
+  SimpleAction simpleAction = 1;
+
+  // изображение малого постера, если есть
+  optional Image smallImage = 10;
+  // изображение большого постера, если есть
+  optional Image bigImage = 11;
+}
+
+// ActionEvent
+message ActionEventList { repeated ActionEvent actionEventList = 1; }
+
+message ActionEvent {
+  // id сеанса
+  uint64 id = 1;
+  // id схемы зала
+  uint64 planId = 2;
+  // название схемы зала
+  string planName = 3;
+  // id представления
+  uint64 actionId = 4;
+  // название представления
+  string actionName = 5;
+  // трехбуквенный код валюты сеанса
+  string currency = 6;
+  // true – сеанс использует квоту
+  bool quota = 7;
+  // список всех ценовых категорий сеанса
+  repeated CategoryPrice categoryPriceList = 8;
+  // список всех тарифных планов сеанса
+  repeated TariffPlan tariffPlanList = 9;
+  // местное время начала сеанса в формате ISO-8601
+  string showTime = 10;
+  // местное время начала продаж сеанса в формате ISO-8601
+  string sellStartTime = 11;
+  // местное время конца продаж сеанса в формате ISO-8601
+  string sellEndTime = 12;
+  // true – билеты на сеанс являются электронными
+  bool eTickets = 13;
+  // true – фамилия и имя покупателя на билете должны быть обязательно
+  bool fullNameRequired = 14;
+  // true – номер телефона должен быть обязательно
+  bool phoneRequired = 15;
+  // true – на сеанс требуется fanId
+  bool fanIdRequired = 16;
+  // true – возврат билетов разрешен
+  bool ticketRefundAllowed = 17;
+  // true – перепечать билетов разрешена
+  bool ticketReissueAllowed = 18;
+  // долговременное бронирование в миллисекундах, должно быть больше 0
+  NullableUInt64 maxReserveTime = 19;
+  // максимальное кол-во билетов в одном заказе, должно быть больше 0
+  NullableUInt64 maxTickets = 20;
+  // НДС
+  double vat = 21;
+  // true – продажа разрешена
+  bool sellEnabled = 22;
+  // true – сеанс содержит места с размещением
+  bool placementPlan = 23;
+  // информация о связанном сеансе из ВБС
+  GatewayEvent gatewayEvent = 24;
+  // true – сеанс в архиве, изменение невозможно
+  bool archival = 25;
+}
+
+message EventSeatState {
+  uint64 id = 1;
+  string description = 2;
+  string name = 3;
+}
+
+message SeatLocation {
+  string sector = 1;
+  string row = 2;
+  string number = 3;
+}
+
+message EventSeat {
+  uint64 id = 1;
+  CategoryPrice categoryPrice = 2;
+  EventSeatState state = 3;
+  optional SeatLocation seatLocation = 4;
+  optional string barcode = 5;
+}
+
+message ActionEventData {
+  uint64 id = 1;
+  optional string svgData = 2;
+  int32 mismatchedPrice = 3;
+  int32 mismatchedName = 4;
+  int32 mismatchedSeat = 5;
+  bool splExists = 6;
+  repeated uint64 etsNotAvailIdSet = 7;
+  repeated TariffPlan tariffPlanList = 8;
+  repeated CategoryPrice categoryPriceList = 9;
+  repeated EventSeat eventSeatList = 10;
+}
+
+// CategoryPrice
+message CategoryPrice {
+  // id ценовой категории
+  uint64 id = 1;
+  // true – места в категории с размещением
+  bool placement = 2;
+  // название ценовой категории
+  string name = 3;
+  // цена мест в категории
+  double price = 4;
+  // количество свободных мест в категории
+  uint64 availability = 5;
+}
+
+// TariffPlan
+message TariffPlan {
+  // id тарифного плана
+  uint64 id = 1;
+  // название тарифного плана
+  string name = 2;
+  // ассоциативный массив, key – id ценовой категории (число Ulong),
+  // value – цена по тарифу (число cur)
+  map<uint64, double> tariffMap = 3;
+}
+
+// GatewayEvent (сеанс в ВБС)
+message GatewayEventList { repeated GatewayEvent gatewayEventList = 1; }
+
+message GatewayEvent {
+  // подключение к ВБС
+  Gateway gateway = 1;
+  // id сеанса в ВБС
+  string eventId = 2;
+  // uid сеанса в ВБС
+  string eventUid = 3;
+  // местное время начала сеанса в формате ISO-8601
+  string showTime = 4;
+  // местное время конца продаж сеанса в формате ISO-8601 если есть
+  NullableString sellEndTime = 5;
+  // трехбуквенный код валюты сеанса
+  string currency = 6;
+  // id представления в ВБС
+  NullableString actionId = 7;
+  // название представления в ВБС
+  string actionName = 8;
+  // id места проведения в ВБС
+  NullableString venueId = 9;
+  // название места проведения в ВБС
+  string venueName = 10;
+  // id зала (схемы зала) в ВБС
+  NullableString planId = 11;
+  // название зала (схемы зала) в ВБС
+  NullableString planName = 12;
+  // дополнительные данные о сеансе, зависят от шлюза в ВБС
+  repeated string data = 13;
+  // причина несовместимости, невозможности продажи данного сеанса
+  NullableString incompatibilityReason = 14;
+  // true – фамилия и имя покупателя на билете должны быть обязательно
+  NullableBool fullNameRequired = 15;
+  // true – номер телефона должен быть обязательно
+  NullableBool phoneRequired = 16;
+  // true – на сеанс требуется fanId
+  NullableBool fanIdRequired = 17;
+  // true – возврат билетов разрешен
+  NullableBool ticketRefundAllowed = 18;
+  // true – перепечать билетов разрешена
+  NullableBool ticketReissueAllowed = 19;
+  // максимальное кол-во билетов в одном заказе, должно быть больше 0
+  NullableUInt64 maxTickets = 20;
+}

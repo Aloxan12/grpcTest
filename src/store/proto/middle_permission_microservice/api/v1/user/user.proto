@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package middle_permission_microservice.api.v1;
+
+import "api/v1/user/requests.proto";
+import "api/v1/user/responses.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "MiddleUserGrpcProto";
+option java_package = "com.middle.user";
+
+service MiddleUserGrpc {
+  rpc CreateUser(RequestCreateUser) returns (ResponseCreateUser);
+}

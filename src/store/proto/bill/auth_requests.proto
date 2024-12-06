@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.kassir";
+option java_outer_classname = "BilAuthAuthRequestsGrpcProto";
+
+package auth;
+
+import "data_types.proto";
+
+// Enums
+
+enum AuthResultType {
+    success = 0;
+    error = 1;
+}
+
+enum PrepareDataStatus {
+    none = 0;
+    expired = 1;
+    inProgress = 2;
+    exists = 3;
+}
+
+// General auth requests
+
+message AuthRequest {
+    string username = 1;
+    string password = 2;
+    UserType userType = 3;
+    optional string locale = 4; // possible values: ru-RU, en-US
+}
+
+message AuthorizedRequest {
+    string username = 1;
+    string token = 2;
+    UserType userType = 3;
+}
+
+message AuthCheckResult {
+    AuthResultType authResultType = 1;
+    PrepareDataStatus PrepareDataStatus = 2;
+}
+
+message AuthResult {
+    string messageResult = 1;
+    string token = 2;
+    AuthResultType authResultType = 3;
+    UserType userType = 4;
+}
+
+message SessionInfo {
+    string username = 1;
+    UserType userType = 2;
+    string venueSchemeUrl = 3;
+    string bookletUrl = 4;
+}
+
+//  Messages for prepare inital data
+
+message PrepareInitialDataResult {
+    enum ResultType {
+        started = 0;
+        processing = 1;
+        completed = 2;
+    }
+
+    string messageResult = 1;
+    ResultType resultType = 2;
+    uint32 completedPercent = 3;
+}

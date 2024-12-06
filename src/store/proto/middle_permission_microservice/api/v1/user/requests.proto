@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package middle_permission_microservice.api.v1;
+
+import "api/v1/common/types.proto"; 
+import "api/v1/user/types.proto";
+
+message RequestCreateUser {
+  MetaData metaData = 1;
+  Data data = 2;
+}

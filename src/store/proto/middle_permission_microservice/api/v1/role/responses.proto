@@ -1,0 +1,11 @@
+syntax = "proto3";
+package middle_permission_microservice.api.v1;
+
+import "api/v1/role/types.proto";
+import "api/v1/common/types.proto";
+
+message ResponseListRoles {
+  bool success = 1;
+  repeated Pagginator pagination = 2;
+  repeated RoleItem roles = 3;
+}

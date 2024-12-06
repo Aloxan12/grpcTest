@@ -1,0 +1,363 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.kassir";
+option java_outer_classname = "BilAuthDataTypesRequestsGrpcProto";
+
+package auth;
+
+import "google/protobuf/struct.proto";
+
+import "data_types.proto";
+import "auth_requests.proto";
+import "struct.proto";
+
+// Countries
+
+message AddCountryRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  // Добавляемая страна
+  string countryName = 2;
+
+  // Код валюты ISO 4217
+  string currencyCode = 3;
+}
+
+message SaveCountryRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  // Сохраняемая страна
+  Country country = 2;
+}
+
+message DeleteCountryRequest {
+  AuthorizedRequest auth = 1;
+  uint64 id = 2;
+}
+
+// Cities
+
+message GetCityByCountryRequest {
+  AuthorizedRequest authorizedRequest = 1;
+  uint64 countryId = 2;
+}
+
+message AddCityRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  // Cтрана добавляемого города
+  uint64 countryId = 2;
+
+  // Название добавляемого города
+  string cityName = 3;
+
+  // Код тайм-зоны
+  string zoneId = 4;
+}
+
+message SaveCityRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  // Сохраняемый город
+  City city = 2;
+}
+
+message DeleteCityRequest {
+  AuthorizedRequest auth = 1;
+  uint64 id = 2;
+}
+
+// Venues
+
+enum VenuesOrder {
+  nameAsc = 0;
+  nameDesc = 1;
+  sizeAsc = 2;
+  sizeDesc = 3;
+}
+
+message GetVenueByCityRequest {
+  AuthorizedRequest authorizedRequest = 1;
+  uint64 cityId = 2;
+}
+
+message GetVenueFilteredRequest {
+
+  AuthorizedRequest authorizedRequest = 1;
+
+  NullableUInt64 cityId = 2;
+  NullableString name = 3;
+
+  // TODO add nullable, if null then by name
+  VenuesOrder order = 4;
+
+  // Elements to send
+  uint64 limit = 5;
+}
+
+message GetVenueByIdRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  uint64 venueId = 2;
+}
+
+message DeleteVenueRequest {
+  AuthorizedRequest auth = 1;
+
+  uint64 id = 2;
+}
+
+message AddPlan1Request {
+  AuthorizedRequest authorizedRequest = 1;
+
+  // Venue id
+  uint64 venueId = 2;
+
+  // Plan name
+  string planName = 3;
+
+  // Category list
+  repeated Category categories = 4;
+
+  // Category limit list
+  repeated CategoryLimit categoryLimits = 5;
+
+  // TODO add nplsplData
+}
+
+message AddPlan3Request {
+  AuthorizedRequest auth = 1;
+  uint64 venueId = 2;
+  string planName = 3;
+  repeated Category categories = 4;
+  repeated CategoryLimit categoryLimits = 5;
+  string svgFileData = 6;
+  // TODO add nplsplData
+}
+
+message CheckPlanRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  // SVG scheme string
+  string svgFileData = 2;
+}
+
+message CheckPlanResponse {
+  // SVG scheme bytes
+  string responseTextData = 1;
+
+  // Optimized SVG
+  string optimizedSvgData = 2;
+
+  // данные мест
+  repeated SeatData seatDataList = 3;
+
+  // Category list
+  repeated Category categories = 4;
+
+  // данные мест
+  repeated SeatData notRecognizedSeats = 5;
+}
+
+message AddPlan2Request {
+  AuthorizedRequest authorizedRequest = 1;
+
+  // Venue id
+  uint64 venueId = 2;
+
+  // Plan name
+  string planName = 3;
+
+  // SVG scheme bytes
+  string svgFileData = 4;
+}
+
+message SavePlanRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  // Seating plan to update
+  SeatingPlan seatingPlan = 2;
+}
+
+// Actions
+
+message GetActionFilteredRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  // только актуальные
+  NullableBool actual = 2;
+
+  // только без сеансов
+  NullableBool withoutActionEventData = 3;
+
+  // город
+  NullableUInt64 cityId = 4;
+
+  // место проведения
+  NullableUInt64 venueId = 5;
+
+  NullableString name = 6;
+
+  NullableString kindId = 7;
+}
+
+message GetActionByIdRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  uint64 actionId = 10;
+}
+
+message DeleteActionRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  uint64 actionId = 2;
+}
+
+message AddActionRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  // id компании-организатора представления
+  uint64 companyOrganizerId = 2;
+  // Раздел, в который будет добавлено представление
+  Kind kind = 3;
+  // Название представления
+  string actionName = 4;
+}
+
+message SaveActionRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  // Сохраняемое представление, сохраняются изменения всех полей, кроме id,
+  // organizerId, kind, bookletType, cityIdSet, venueIdSet, actual. Поле rating
+  // сохраняется только для пользователя с ролью OPERATOR
+  Action data = 2;
+}
+
+// ActionEvents
+
+message GetActionEventFilteredRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  uint64 actionId = 2;
+}
+
+message AddActionEventRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  // Список добавляемых сеансов. В объекте ActionEvent игнорируются поля id,
+  // planName, actionName, tariffPlanList, placementPlan, archival. В поле
+  // gatewayEvent в случае сеанса с ВБС передается объект GatewayEvent,
+  // полученный в результате запроса GET_GATEWAY_EVENT_LIST. В случае сеанса без
+  // ВБС передается GatewayEvent по умолчанию. В объекте CategoryPrice
+  // используются только поля id и price, причем в качестве id передается id из
+  // соответствующего Category.
+  repeated ActionEvent data = 2;
+}
+
+message SaveActionEventRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  // Сохраняемый сеанс, сохраняются изменения всех полей, кроме id, planId,
+  // planName, actionId, actionName, currency, quota, placementPlan,
+  // gatewayEvent, archival. В объекте CategoryPrice сохраняются только поля
+  // name и price. В объекте TariffPlan сохраняются только поля name и tariffMap
+  ActionEvent data = 2;
+}
+
+message DeleteActionEventRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  uint64 id = 2;
+}
+
+// Gateways
+
+message GetGatewayEventListRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  // id подключения
+  int32 data = 2;
+}
+
+// Seating plans
+
+message GetSeatingPlanByIdRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  uint64 seatingPlanId = 2;
+}
+
+message GetSeatingPlanListRequest {
+  AuthorizedRequest authorizedRequest = 1;
+
+  NullableUInt64 venueId = 2;
+}
+
+message DeleteSeatingPlanRequest {
+  AuthorizedRequest auth = 1;
+  uint64 id = 2;
+}
+
+// Venue
+message AddVenueRequest {
+  AuthorizedRequest auth = 1;
+
+  uint64 cityId = 2;
+  string name = 3;
+}
+
+message AddVenueResponse { Venue venue = 1; }
+
+message NullableImage {
+  oneof kind {
+    google.protobuf.NullValue null = 1;
+    Image image = 2;
+  }
+}
+
+message SaveVenueRequest {
+  AuthorizedRequest auth = 1;
+  SimpleVenue simpleVenue = 2;
+  Image bigImage = 3;
+}
+
+message SaveVenueResponse { Venue venue = 1; }
+
+message ActionEventSyncRequest {
+  AuthorizedRequest auth = 1;
+  uint64 id = 2;
+}
+
+message ActionEventSyncResponse {
+  ActionEventData actionEventData = 1;
+  bool priceChanged = 2;
+  string report = 3;
+}
+
+message GetSyncReportRequest {
+  AuthorizedRequest auth = 1;
+  uint64 actionId = 2;
+  uint64 planId = 3;
+  GatewayEvent gatewayEvent = 4;
+}
+
+message GetSyncReportResponse { int32 id = 1; }
+
+message GetGatewayEventInfoRequest {
+  AuthorizedRequest auth = 1;
+  GatewayEvent gatewayEvent = 2;
+}
+
+message GetGatewayEventInfoResponse { string report = 1; }
+
+message SetActionBookletRequest {
+  AuthorizedRequest auth = 1;
+  uint64 actionId = 2;
+  BookletType type = 3;
+  string data = 4;
+}
+
+message SetActionBookletResponse {
+  bool success = 1;
+}

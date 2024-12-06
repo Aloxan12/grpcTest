@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package middle_permission_microservice.api.v1;
+
+message Data {
+  string firstName = 1;
+  string lastName = 2;
+  string middleName = 3;
+  string email = 4;
+  string roleId = 5;
+  string groupId = 6;
+  oneof organization_option {
+    string organization = 7;
+  }
+}
+
+message CreatedUserData {
+  string id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string middleName = 4;
+  string email = 5;
+  string roleId = 6;
+  string groupId = 7;
+  oneof organization_option {
+    string organization = 8;
+  }
+  string status = 9;
+}

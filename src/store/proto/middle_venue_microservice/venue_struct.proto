@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+import "google/protobuf/struct.proto";
+
+option java_multiple_files = true;
+option java_package = "com.kassir";
+option java_outer_classname = "BilAuthStructGrpcProto";
+
+package venue;
+
+message NullableString {
+  oneof kind {
+    google.protobuf.NullValue null = 1;
+    string data = 2;
+  }
+}
+
+message NullableUInt64 {
+  oneof kind {
+    google.protobuf.NullValue null = 1;
+    uint64 data = 2;
+  }
+}
+
+message NullableBool {
+  oneof kind {
+    google.protobuf.NullValue null = 1;
+    bool data = 2;
+  }
+}
+
+message DecimalValue {
+  uint32 scale = 1;
+  uint32 precision = 2;
+  bytes value = 3;
+}

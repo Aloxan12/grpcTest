@@ -1,0 +1,7 @@
+syntax = "proto3";
+package middle_permission_microservice.api.v1;
+
+message RoleItem {
+  string id = 1;
+  string roleType = 2;
+}
