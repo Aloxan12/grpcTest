@@ -13,12 +13,13 @@ interface GrpcBaseQueryArgs {
 }
 
 const transport = new GrpcWebFetchTransport({
-    baseUrl: `${import.meta.env.baseUrl}`,
+    baseUrl: `https://pre-dev.kassir.grpc.fox-dev.ru:8001/`,
 });
 
 export const grpcBaseQuery: BaseQueryFn<GrpcBaseQueryArgs, unknown, RpcError> = async ({ service, method, request }) => {
     try {
         const client = new service(transport);
+        console.log('client', client)
         const response = await client[method](request);
         return { data: response };
     } catch (error) {
